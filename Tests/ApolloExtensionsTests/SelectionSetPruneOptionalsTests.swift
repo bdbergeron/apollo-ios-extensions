@@ -41,8 +41,26 @@ final class SelectionSetPruneOptionalsTests: XCTestCase {
       node: .init(
         id: "3EEDDC8E-0CAA-40D4-8509-580AFF80A83B",
         name: nil))
+
+    // Edge
     XCTAssertNotEqual(objectFromGeneratedInitializer, parsedObject)
+    XCTAssertEqual(objectFromGeneratedInitializer.__typename, parsedObject.__typename)
+    XCTAssertEqual(objectFromGeneratedInitializer.__objectType, parsedObject.__objectType)
+
+    // Node
+    XCTAssertNotEqual(objectFromGeneratedInitializer.node, parsedObject.node)
+    XCTAssertEqual(objectFromGeneratedInitializer.node.id, parsedObject.node.id)
+    XCTAssertEqual(objectFromGeneratedInitializer.node.name, parsedObject.node.name)
+    XCTAssertEqual(objectFromGeneratedInitializer.node.__typename, parsedObject.node.__typename)
+    XCTAssertEqual(objectFromGeneratedInitializer.node.__objectType, parsedObject.node.__objectType)
+
+    // So what's driving the inequality? The underlying `DataDict`
+    XCTAssertNotEqual(objectFromGeneratedInitializer.__data, parsedObject.__data)
+    XCTAssertNotEqual(objectFromGeneratedInitializer.node.__data, parsedObject.node.__data)
+
     let pruned = objectFromGeneratedInitializer.pruneOptionals()
+
+    // And now everything's equal as one would expect
     XCTAssertEqual(pruned, parsedObject)
   }
 }
