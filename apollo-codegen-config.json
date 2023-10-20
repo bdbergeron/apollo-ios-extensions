@@ -1,0 +1,30 @@
+{
+  "schemaNamespace": "ApolloExtensionsTestSchema",
+  "input": {
+    "operationSearchPaths": ["Tests/**/*.graphql"],
+    "schemaSearchPaths": ["Sources/ApolloExtensionsTestSchema/**/*.graphqls"]
+  },
+  "output": {
+    "schemaTypes": {
+      "path": "Sources/ApolloExtensionsTestSchema",
+      "moduleType": {
+        "other": {}
+      }
+    },
+    "operations": {
+      "relative": {
+        "accessModifier": "internal"
+      }
+    },
+    "testMocks": {
+      "none": {}
+    }
+  },
+  "options": {
+    "markOperationDefinitionsAsFinal": true,
+    "selectionSetInitializers": {
+      "operations": true,
+      "namedFragments": true
+    }
+  }
+}

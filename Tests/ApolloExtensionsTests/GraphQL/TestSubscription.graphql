@@ -1,0 +1,9 @@
+subscription TestSubscription {
+  people {
+    edges {
+      node {
+        ...Person
+      }
+    }
+  }
+}

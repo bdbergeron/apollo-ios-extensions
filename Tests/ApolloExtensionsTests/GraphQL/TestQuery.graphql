@@ -1,0 +1,9 @@
+query TestQuery {
+  people {
+    edges {
+      node {
+        ...Person
+      }
+    }
+  }
+}

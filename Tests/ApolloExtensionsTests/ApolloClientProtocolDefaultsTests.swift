@@ -21,7 +21,7 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
       XCTAssertEqual(parameters.contextIdentifier, nil)
       XCTAssertNil(parameters.context)
       XCTAssertEqual(parameters.queue, .main)
-      let data = TestQuery.Data(items: .init(edges: []))
+      let data = TestQuery.Data(people: .init(edges: []))
       return .success(GraphQLResult(data: data))
     }
 
@@ -37,7 +37,7 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
       XCTAssertEqual(parameters.cachePolicy, .default)
       XCTAssertNil(parameters.context)
       XCTAssertEqual(parameters.callbackQueue, .main)
-      let data = TestQuery.Data(items: .init(edges: []))
+      let data = TestQuery.Data(people: .init(edges: []))
       return .success(GraphQLResult(data: data))
     }
 
@@ -53,11 +53,11 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
       XCTAssertEqual(parameters.publishResultToStore, true)
       XCTAssertNil(parameters.context)
       XCTAssertEqual(parameters.queue, .main)
-      let data = TestMutation.Data(updateItem: .init(items: []))
+      let data = TestMutation.Data(updatePerson: .init(id: "1", name: "Brad"))
       return .success(GraphQLResult(data: data))
     }
 
-    let mutation = TestMutation(id: "1", name: "Bradley")
+    let mutation = TestMutation(id: "1", updates: .init(name: "Brad"))
     let expectation = expectation(description: #function)
     apolloClient.perform(mutation: mutation) { _ in
       expectation.fulfill()
@@ -70,11 +70,11 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
       XCTAssertEqual(parameters.files, [])
       XCTAssertNil(parameters.context)
       XCTAssertEqual(parameters.queue, .main)
-      let data = TestMutation.Data(updateItem: .init(items: []))
+      let data = TestMutation.Data(updatePerson: .init(id: "1", name: "Brad"))
       return .success(GraphQLResult(data: data))
     }
 
-    let mutation = TestMutation(id: "1", name: "Bradley")
+    let mutation = TestMutation(id: "1", updates: .init(name: "Bradley"))
     let expectation = expectation(description: #function)
     apolloClient.upload(operation: mutation, files: []) { _ in
       expectation.fulfill()
@@ -87,7 +87,7 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
     apolloClient.subscribeResult = { parameters in
       XCTAssertNil(parameters.context)
       XCTAssertEqual(parameters.queue, .main)
-      let data = TestSubscription.Data(items: .init(edges: []))
+      let data = TestSubscription.Data(people: .init(edges: []))
       return .success(GraphQLResult(data: data))
     }
 

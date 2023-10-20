@@ -2,34 +2,36 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+import ApolloExtensionsTestSchema
 
 final class TestQuery: GraphQLQuery {
   static let operationName: String = "TestQuery"
-  static let operationDocument: OperationDocument = .init(
+  static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query TestQuery { items { __typename edges { __typename node { __typename id name } } } }"#
+      #"query TestQuery { people { __typename edges { __typename node { __typename ...Person } } } }"#,
+      fragments: [Person.self]
     ))
 
-  init() {}
+  public init() {}
 
-  struct Data: SelectionSet {
+  struct Data: ApolloExtensionsTestSchema.SelectionSet {
     let __data: DataDict
     init(_dataDict: DataDict) { __data = _dataDict }
 
-    static var __parentType: ParentType { Objects.Query }
-    static var __selections: [Selection] { [
-      .field("items", Items.self),
+    static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Query }
+    static var __selections: [ApolloAPI.Selection] { [
+      .field("people", People.self),
     ] }
 
-    var items: Items { __data["items"] }
+    var people: People { __data["people"] }
 
     init(
-      items: Items
+      people: People
     ) {
       self.init(_dataDict: DataDict(
         data: [
-          "__typename": Objects.Query.typename,
-          "items": items._fieldData,
+          "__typename": ApolloExtensionsTestSchema.Objects.Query.typename,
+          "people": people._fieldData,
         ],
         fulfilledFragments: [
           ObjectIdentifier(TestQuery.Data.self)
@@ -37,12 +39,15 @@ final class TestQuery: GraphQLQuery {
       ))
     }
 
-    struct Items: SelectionSet {
+    /// People
+    ///
+    /// Parent Type: `PersonCollection`
+    struct People: ApolloExtensionsTestSchema.SelectionSet {
       let __data: DataDict
       init(_dataDict: DataDict) { __data = _dataDict }
 
-      static var __parentType: ParentType { Objects.ItemCollection }
-      static var __selections: [Selection] { [
+      static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.PersonCollection }
+      static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .field("edges", [Edge].self),
       ] }
@@ -54,21 +59,24 @@ final class TestQuery: GraphQLQuery {
       ) {
         self.init(_dataDict: DataDict(
           data: [
-            "__typename": Objects.ItemCollection.typename,
+            "__typename": ApolloExtensionsTestSchema.Objects.PersonCollection.typename,
             "edges": edges._fieldData,
           ],
           fulfilledFragments: [
-            ObjectIdentifier(TestQuery.Data.Items.self)
+            ObjectIdentifier(TestQuery.Data.People.self)
           ]
         ))
       }
 
-      struct Edge: SelectionSet {
+      /// People.Edge
+      ///
+      /// Parent Type: `PersonCollectionEdge`
+      struct Edge: ApolloExtensionsTestSchema.SelectionSet {
         let __data: DataDict
         init(_dataDict: DataDict) { __data = _dataDict }
 
-        static var __parentType: ParentType { Objects.ItemCollectionEdge }
-        static var __selections: [Selection] { [
+        static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.PersonCollectionEdge }
+        static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("node", Node.self),
         ] }
@@ -80,41 +88,57 @@ final class TestQuery: GraphQLQuery {
         ) {
           self.init(_dataDict: DataDict(
             data: [
-              "__typename": Objects.ItemCollectionEdge.typename,
+              "__typename": ApolloExtensionsTestSchema.Objects.PersonCollectionEdge.typename,
               "node": node._fieldData,
             ],
             fulfilledFragments: [
-              ObjectIdentifier(TestQuery.Data.Items.Edge.self)
+              ObjectIdentifier(TestQuery.Data.People.Edge.self)
             ]
           ))
         }
 
-        struct Node: SelectionSet {
+        /// People.Edge.Node
+        ///
+        /// Parent Type: `Person`
+        struct Node: ApolloExtensionsTestSchema.SelectionSet {
           let __data: DataDict
           init(_dataDict: DataDict) { __data = _dataDict }
 
-          static var __parentType: ParentType { Objects.Item }
-          static var __selections: [Selection] { [
+          static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Person }
+          static var __selections: [ApolloAPI.Selection] { [
             .field("__typename", String.self),
-            .field("id", String.self),
-            .field("name", String?.self),
+            .fragment(Person.self),
           ] }
 
-          var id: String { __data["id"] }
-          var name: String? { __data["name"] }
+          var id: ApolloExtensionsTestSchema.ID { __data["id"] }
+          var name: String { __data["name"] }
+          var nickname: String? { __data["nickname"] }
+          var age: Int? { __data["age"] }
+
+          struct Fragments: FragmentContainer {
+            let __data: DataDict
+            init(_dataDict: DataDict) { __data = _dataDict }
+
+            var person: Person { _toFragment() }
+          }
 
           init(
-            id: String,
-            name: String? = nil
+            id: ApolloExtensionsTestSchema.ID,
+            name: String,
+            nickname: String? = nil,
+            age: Int? = nil
           ) {
             self.init(_dataDict: DataDict(
               data: [
-                "__typename": Objects.Item.typename,
+                "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
                 "id": id,
                 "name": name,
+                "nickname": nickname,
+                "age": age,
               ],
               fulfilledFragments: [
-                ObjectIdentifier(TestQuery.Data.Items.Edge.Node.self)
+                ObjectIdentifier(TestQuery.Data.People.Edge.Node.self),
+                ObjectIdentifier(Person.self)
               ]
             ))
           }

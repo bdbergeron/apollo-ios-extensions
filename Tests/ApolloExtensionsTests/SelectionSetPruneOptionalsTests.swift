@@ -9,58 +9,59 @@ import XCTest
 
 final class SelectionSetPruneOptionalsTests: XCTestCase {
   func test_pruneOptionals_withOptional() throws {
-    let parsedObject = try TestQuery.Data.Items.Edge(
+    let parsedPerson = try Person(
       data: [
-        "__typename": "ItemCollectionEdge",
-        "node": [
-          "__typename": "Item",
-          "id": "3EEDDC8E-0CAA-40D4-8509-580AFF80A83B",
-          "name": "Alta Ski Area",
-        ],
+        "__typename": "Person",
+        "id": "1",
+        "name": "Bradley",
+        "nickname": "Brad",
+        "age": 34,
       ])
-    let objectFromGeneratedInitializer = TestQuery.Data.Items.Edge(
-      node: .init(
-        id: "3EEDDC8E-0CAA-40D4-8509-580AFF80A83B",
-        name: "Alta Ski Area"))
-    XCTAssertNotEqual(objectFromGeneratedInitializer, parsedObject)
-    let pruned = objectFromGeneratedInitializer.pruneOptionals()
-    XCTAssertEqual(pruned, parsedObject)
+    let personFromGeneratedInitializer = Person(
+      id: "1",
+      name: "Bradley",
+      nickname: "Brad",
+      age: 34)
+    XCTAssertNotEqual(personFromGeneratedInitializer, parsedPerson)
+    
+    let pruned = personFromGeneratedInitializer.pruneOptionals()
+    XCTAssertEqual(pruned, parsedPerson)
   }
 
   func test_pruneOptionals_withNull() throws {
-    let parsedObject = try TestQuery.Data.Items.Edge(
+    let parsedPerson = try Person(
       data: [
-        "__typename": "ItemCollectionEdge",
-        "node": [
-          "__typename": "Item",
-          "id": "3EEDDC8E-0CAA-40D4-8509-580AFF80A83B",
-          "name": nil,
-        ],
+        "__typename": "Person",
+        "id": "1",
+        "name": "Bradley",
+        "nickname": nil,
+        "age": nil,
       ])
-    let objectFromGeneratedInitializer = TestQuery.Data.Items.Edge(
-      node: .init(
-        id: "3EEDDC8E-0CAA-40D4-8509-580AFF80A83B",
-        name: nil))
+    let personFromGeneratedInitializer = Person(
+      id: "1",
+      name: "Bradley",
+      nickname: nil,
+      age: nil)
 
-    // Edge
-    XCTAssertNotEqual(objectFromGeneratedInitializer, parsedObject)
-    XCTAssertEqual(objectFromGeneratedInitializer.__typename, parsedObject.__typename)
-    XCTAssertEqual(objectFromGeneratedInitializer.__objectType, parsedObject.__objectType)
+    // All the fields are equal...
+    XCTAssertEqual(personFromGeneratedInitializer.__typename, parsedPerson.__typename)
+    XCTAssertEqual(personFromGeneratedInitializer.__objectType, parsedPerson.__objectType)
+    XCTAssertEqual(personFromGeneratedInitializer.id, parsedPerson.id)
+    XCTAssertEqual(personFromGeneratedInitializer.name, parsedPerson.name)
+    XCTAssertEqual(personFromGeneratedInitializer.nickname, parsedPerson.nickname)
+    XCTAssertEqual(personFromGeneratedInitializer.age, parsedPerson.age)
+    XCTAssertEqual(personFromGeneratedInitializer.__typename, parsedPerson.__typename)
+    XCTAssertEqual(personFromGeneratedInitializer.__objectType, parsedPerson.__objectType)
 
-    // Node
-    XCTAssertNotEqual(objectFromGeneratedInitializer.node, parsedObject.node)
-    XCTAssertEqual(objectFromGeneratedInitializer.node.id, parsedObject.node.id)
-    XCTAssertEqual(objectFromGeneratedInitializer.node.name, parsedObject.node.name)
-    XCTAssertEqual(objectFromGeneratedInitializer.node.__typename, parsedObject.node.__typename)
-    XCTAssertEqual(objectFromGeneratedInitializer.node.__objectType, parsedObject.node.__objectType)
+    // But the objects themselves are seemingly not.
+    XCTAssertNotEqual(personFromGeneratedInitializer, parsedPerson)
 
     // So what's driving the inequality? The underlying `DataDict`
-    XCTAssertNotEqual(objectFromGeneratedInitializer.__data, parsedObject.__data)
-    XCTAssertNotEqual(objectFromGeneratedInitializer.node.__data, parsedObject.node.__data)
+    XCTAssertNotEqual(personFromGeneratedInitializer.__data, parsedPerson.__data)
 
-    let pruned = objectFromGeneratedInitializer.pruneOptionals()
+    let pruned = personFromGeneratedInitializer.pruneOptionals()
 
     // And now everything's equal as one would expect
-    XCTAssertEqual(pruned, parsedObject)
+    XCTAssertEqual(pruned, parsedPerson)
   }
 }

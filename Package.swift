@@ -23,10 +23,16 @@ let package = Package(
       dependencies: [
         .product(name: "Apollo", package: "apollo-ios"),
       ]),
+    .target(
+      name: "ApolloExtensionsTestSchema",
+      dependencies: [
+        .product(name: "Apollo", package: "apollo-ios"),
+      ]),
     .testTarget(
       name: "ApolloExtensionsTests",
       dependencies: [
         .target(name: "ApolloExtensions"),
+        .target(name: "ApolloExtensionsTestSchema"),
       ],
       resources: [
         .process("Resources"),

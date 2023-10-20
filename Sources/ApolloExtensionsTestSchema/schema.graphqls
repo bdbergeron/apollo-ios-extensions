@@ -1,0 +1,57 @@
+interface Node {
+  id: ID!
+}
+
+interface CollectionEdge {
+  cursor: String!
+  node: Node!
+}
+
+interface Collection {
+  edges: [CollectionEdge!]!
+  pageInfo: PaginationInfo!
+}
+
+type PaginationInfo {
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Person implements Node {
+  id: ID!
+  name: String!
+  nickname: String
+  age: Int
+}
+
+type PersonCollectionEdge implements CollectionEdge {
+  cursor: String!
+  node: Person!
+}
+
+type PersonCollection implements Collection {
+  edges: [PersonCollectionEdge!]!
+}
+
+type Query {
+  people: PersonCollection!
+}
+
+input UpdatePersonMutationInput {
+  name: String!
+  nickname: String
+  age: Int
+}
+
+type Mutation {
+  updatePerson(
+    id: ID!,
+    updates: UpdatePersonMutationInput!
+  ): Person!
+}
+
+type Subscription {
+  people: PersonCollection!
+}
