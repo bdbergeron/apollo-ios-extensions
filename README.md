@@ -1,6 +1,11 @@
 # apollo-ios-extensions
 Helpful extensions to the [apollo-ios](https://github.com/apollographql/apollo-ios) package.
 
+[![Build and Test](https://github.com/bdbergeron/apollo-ios-extensions/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/bdbergeron/apollo-ios-extensions/actions/workflows/build-and-test.yml)
+[![codecov](https://codecov.io/gh/bdbergeron/apollo-ios-extensions/graph/badge.svg?token=e6ZQ0eQaJk)](https://codecov.io/gh/bdbergeron/apollo-ios-extensions)
+[![CodeFactor](https://www.codefactor.io/repository/github/bdbergeron/apollo-ios-extensions/badge)](https://www.codefactor.io/repository/github/bdbergeron/apollo-ios-extensions)
+
+
 ## Features
 
 ### ApolloClientProtocol Default Values
