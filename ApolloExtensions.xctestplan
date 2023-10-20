@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "0925E389-08A6-4442-A22A-51371A498819",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "ApolloExtensions",
+          "name" : "ApolloExtensions"
+        }
+      ]
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ApolloExtensionsTests",
+        "name" : "ApolloExtensionsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -1,0 +1,17 @@
+{
+  "data": {
+    "items": {
+      "__typename": "ItemCollection",
+      "edges": [
+        {
+          "__typename": "ItemCollectionEdge",
+          "node": {
+            "__typename": "Item",
+            "id": "1",
+            "name": "Brad"
+          }
+        }
+      ]
+    }
+  }
+}
