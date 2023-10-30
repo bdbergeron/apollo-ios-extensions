@@ -1,0 +1,5 @@
+mutation TestMutation($id: ID!, $updates: UpdatePersonMutationInput!) {
+  updatePerson(id: $id, updates: $updates) {
+    ...Person
+  }
+}

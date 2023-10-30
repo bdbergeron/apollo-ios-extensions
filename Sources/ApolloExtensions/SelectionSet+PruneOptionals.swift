@@ -17,6 +17,9 @@ extension DataDict {
       if let dataDict = value as? DataDict {
         return AnyHashable(dataDict.pruneOptionals())
       }
+      if let dataDictArray = value as? [DataDict] {
+        return AnyHashable(dataDictArray.map { $0.pruneOptionals() })
+      }
       guard let optionalValue = value.base as? AnyHashable? else {
         return value
       }

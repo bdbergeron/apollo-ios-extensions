@@ -2,123 +2,78 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+import ApolloExtensionsTestSchema
 
 final class TestSubscription: GraphQLSubscription {
   static let operationName: String = "TestSubscription"
-  static let operationDocument: OperationDocument = .init(
+  static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"subscription TestSubscription { items { __typename edges { __typename node { __typename id name } } } }"#
+      #"subscription TestSubscription { people { __typename ...PersonCollection } }"#,
+      fragments: [PersonCollection.self, Person.self]
     ))
 
-  init() {}
+  public init() {}
 
-  struct Data: SelectionSet {
+  struct Data: ApolloExtensionsTestSchema.SelectionSet {
     let __data: DataDict
     init(_dataDict: DataDict) { __data = _dataDict }
 
-    static var __parentType: ParentType { Objects.Subscription }
-    static var __selections: [Selection] { [
-      .field("items", Items.self),
+    static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Subscription }
+    static var __selections: [ApolloAPI.Selection] { [
+      .field("people", People.self),
     ] }
 
-    var items: Items { __data["items"] }
+    var people: People { __data["people"] }
 
     init(
-      items: Items
+      people: People
     ) {
       self.init(_dataDict: DataDict(
         data: [
-          "__typename": Objects.Subscription.typename,
-          "items": items._fieldData,
+          "__typename": ApolloExtensionsTestSchema.Objects.Subscription.typename,
+          "people": people._fieldData,
         ],
         fulfilledFragments: [
-          ObjectIdentifier(TestQuery.Data.self)
+          ObjectIdentifier(TestSubscription.Data.self)
         ]
       ))
     }
 
-    struct Items: SelectionSet {
+    /// People
+    ///
+    /// Parent Type: `PersonCollection`
+    struct People: ApolloExtensionsTestSchema.SelectionSet {
       let __data: DataDict
       init(_dataDict: DataDict) { __data = _dataDict }
 
-      static var __parentType: ParentType { Objects.ItemCollection }
-      static var __selections: [Selection] { [
+      static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.PersonCollection }
+      static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("edges", [Edge].self),
+        .fragment(PersonCollection.self),
       ] }
 
-      var edges: [Edge] { __data["edges"] }
+      var edges: [PersonCollection.Edge] { __data["edges"] }
 
-      init(
-        edges: [Edge]
-      ) {
-        self.init(_dataDict: DataDict(
-          data: [
-            "__typename": Objects.ItemCollection.typename,
-            "edges": edges._fieldData,
-          ],
-          fulfilledFragments: [
-            ObjectIdentifier(TestQuery.Data.Items.self)
-          ]
-        ))
-      }
-
-      struct Edge: SelectionSet {
+      struct Fragments: FragmentContainer {
         let __data: DataDict
         init(_dataDict: DataDict) { __data = _dataDict }
 
-        static var __parentType: ParentType { Objects.ItemCollectionEdge }
-        static var __selections: [Selection] { [
-          .field("__typename", String.self),
-          .field("node", Node.self),
-        ] }
+        var personCollection: PersonCollection { _toFragment() }
+      }
 
-        var node: Node { __data["node"] }
-
-        init(
-          node: Node
-        ) {
-          self.init(_dataDict: DataDict(
-            data: [
-              "__typename": Objects.ItemCollectionEdge.typename,
-              "node": node._fieldData,
-            ],
-            fulfilledFragments: [
-              ObjectIdentifier(TestQuery.Data.Items.Edge.self)
-            ]
-          ))
-        }
-
-        struct Node: SelectionSet {
-          let __data: DataDict
-          init(_dataDict: DataDict) { __data = _dataDict }
-
-          static var __parentType: ParentType { Objects.Item }
-          static var __selections: [Selection] { [
-            .field("__typename", String.self),
-            .field("id", String.self),
-            .field("name", String?.self),
-          ] }
-
-          var id: String { __data["id"] }
-          var name: String? { __data["name"] }
-
-          init(
-            id: String,
-            name: String? = nil
-          ) {
-            self.init(_dataDict: DataDict(
-              data: [
-                "__typename": Objects.Item.typename,
-                "id": id,
-                "name": name,
-              ],
-              fulfilledFragments: [
-                ObjectIdentifier(TestQuery.Data.Items.Edge.Node.self)
-              ]
-            ))
-          }
-        }
+      init(
+        edges: [PersonCollection.Edge]
+      ) {
+        self.init(_dataDict: DataDict(
+          data: [
+            "__typename": ApolloExtensionsTestSchema.Objects.PersonCollection.typename,
+            "edges": edges._fieldData,
+          ],
+          fulfilledFragments: [
+            ObjectIdentifier(TestSubscription.Data.People.self),
+            ObjectIdentifier(PersonCollection.self)
+          ]
+        ))
       }
     }
   }

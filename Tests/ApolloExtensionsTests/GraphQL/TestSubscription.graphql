@@ -1,0 +1,5 @@
+subscription TestSubscription {
+  people {
+    ...PersonCollection
+  }
+}

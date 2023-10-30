@@ -1,0 +1,29 @@
+{
+  "data": {
+    "people": {
+      "__typename": "PersonCollection",
+      "edges": [
+        {
+          "__typename": "PersonCollectionEdge",
+          "node": {
+            "__typename": "Person",
+            "id": "1",
+            "name": "Bradley",
+            "nickname": "Brad",
+            "age": 34
+          }
+        },
+        {
+          "__typename": "PersonCollectionEdge",
+          "node": {
+            "__typename": "Person",
+            "id": "2",
+            "name": "Noah",
+            "nickname": null,
+            "age": null
+          }
+        }
+      ]
+    }
+  }
+}

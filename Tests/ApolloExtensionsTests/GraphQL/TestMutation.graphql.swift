@@ -2,51 +2,53 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+import ApolloExtensionsTestSchema
 
 final class TestMutation: GraphQLMutation {
   static let operationName: String = "TestMutation"
-  static let operationDocument: OperationDocument = .init(
+  static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"mutation TestMutation($id: ID!, $name: String!) { updateItem(id: $id: name: $name) { __typename items { __typename edges { __typename node { __typename id name } } } } }"#
+      #"mutation TestMutation($id: ID!, $updates: UpdatePersonMutationInput!) { updatePerson(id: $id, updates: $updates) { __typename ...Person } }"#,
+      fragments: [Person.self]
     ))
 
-  var id: ID
-  var name: String?
+  public var id: ApolloExtensionsTestSchema.ID
+  public var updates: ApolloExtensionsTestSchema.UpdatePersonMutationInput
 
-  init(
-    id: ID,
-    name: String?
+  public init(
+    id: ApolloExtensionsTestSchema.ID,
+    updates: ApolloExtensionsTestSchema.UpdatePersonMutationInput
   ) {
     self.id = id
-    self.name = name
+    self.updates = updates
   }
 
-  var __variables: Variables? { [
+  public var __variables: Variables? { [
     "id": id,
-    "name": name
+    "updates": updates
   ] }
 
-  struct Data: SelectionSet {
+  struct Data: ApolloExtensionsTestSchema.SelectionSet {
     let __data: DataDict
     init(_dataDict: DataDict) { __data = _dataDict }
 
-    static var __parentType: ParentType { Objects.Mutation }
-    static var __selections: [Selection] { [
-      .field("updateItem", UpdateItemCollection.self, arguments: [
+    static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Mutation }
+    static var __selections: [ApolloAPI.Selection] { [
+      .field("updatePerson", UpdatePerson.self, arguments: [
         "id": .variable("id"),
-        "name": .variable("name"),
+        "updates": .variable("updates")
       ]),
     ] }
 
-    var updateItem: UpdateItemCollection { __data["updateItem"] }
+    var updatePerson: UpdatePerson { __data["updatePerson"] }
 
     init(
-      updateItem: UpdateItemCollection
+      updatePerson: UpdatePerson
     ) {
       self.init(_dataDict: DataDict(
         data: [
-          "__typename": Objects.Mutation.typename,
-          "updateItem": updateItem._fieldData,
+          "__typename": ApolloExtensionsTestSchema.Objects.Mutation.typename,
+          "updatePerson": updatePerson._fieldData,
         ],
         fulfilledFragments: [
           ObjectIdentifier(TestMutation.Data.self)
@@ -54,115 +56,50 @@ final class TestMutation: GraphQLMutation {
       ))
     }
 
-    struct UpdateItemCollection: SelectionSet {
+    /// UpdatePerson
+    ///
+    /// Parent Type: `Person`
+    struct UpdatePerson: ApolloExtensionsTestSchema.SelectionSet {
       let __data: DataDict
       init(_dataDict: DataDict) { __data = _dataDict }
 
-      static var __parentType: ParentType { Objects.TestMutationResponse }
-      static var __selections: [Selection] { [
+      static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Person }
+      static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
-        .field("items", [Items].self),
+        .fragment(Person.self),
       ] }
 
-      var items: [Items] { __data["records"] }
+      var id: ApolloExtensionsTestSchema.ID { __data["id"] }
+      var name: String { __data["name"] }
+      var nickname: String? { __data["nickname"] }
+      var age: Int? { __data["age"] }
 
-      init(
-        items: [Items]
-      ) {
-        self.init(_dataDict: DataDict(
-          data: [
-            "__typename": Objects.TestMutationResponse.typename,
-            "items": items._fieldData,
-          ],
-          fulfilledFragments: [
-            ObjectIdentifier(TestMutation.Data.UpdateItemCollection.self)
-          ]
-        ))
-      }
-
-      struct Items: SelectionSet {
+      struct Fragments: FragmentContainer {
         let __data: DataDict
         init(_dataDict: DataDict) { __data = _dataDict }
 
-        static var __parentType: ParentType { Objects.ItemCollection }
-        static var __selections: [Selection] { [
-          .field("__typename", String.self),
-          .field("edges", [Edge].self),
-        ] }
+        var person: Person { _toFragment() }
+      }
 
-        var edges: [Edge] { __data["edges"] }
-
-        init(
-          edges: [Edge]
-        ) {
-          self.init(_dataDict: DataDict(
-            data: [
-              "__typename": Objects.ItemCollection.typename,
-              "edges": edges._fieldData,
-            ],
-            fulfilledFragments: [
-              ObjectIdentifier(TestQuery.Data.Items.self)
-            ]
-          ))
-        }
-
-        struct Edge: SelectionSet {
-          let __data: DataDict
-          init(_dataDict: DataDict) { __data = _dataDict }
-
-          static var __parentType: ParentType { Objects.ItemCollectionEdge }
-          static var __selections: [Selection] { [
-            .field("__typename", String.self),
-            .field("node", Node.self),
-          ] }
-
-          var node: Node { __data["node"] }
-
-          init(
-            node: Node
-          ) {
-            self.init(_dataDict: DataDict(
-              data: [
-                "__typename": Objects.ItemCollectionEdge.typename,
-                "node": node._fieldData,
-              ],
-              fulfilledFragments: [
-                ObjectIdentifier(TestQuery.Data.Items.Edge.self)
-              ]
-            ))
-          }
-
-          struct Node: SelectionSet {
-            let __data: DataDict
-            init(_dataDict: DataDict) { __data = _dataDict }
-
-            static var __parentType: ParentType { Objects.Item }
-            static var __selections: [Selection] { [
-              .field("__typename", String.self),
-              .field("id", String.self),
-              .field("name", String?.self),
-            ] }
-
-            var id: String { __data["id"] }
-            var name: String? { __data["name"] }
-
-            init(
-              id: String,
-              name: String? = nil
-            ) {
-              self.init(_dataDict: DataDict(
-                data: [
-                  "__typename": Objects.Item.typename,
-                  "id": id,
-                  "name": name,
-                ],
-                fulfilledFragments: [
-                  ObjectIdentifier(TestQuery.Data.Items.Edge.Node.self)
-                ]
-              ))
-            }
-          }
-        }
+      init(
+        id: ApolloExtensionsTestSchema.ID,
+        name: String,
+        nickname: String? = nil,
+        age: Int? = nil
+      ) {
+        self.init(_dataDict: DataDict(
+          data: [
+            "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
+            "id": id,
+            "name": name,
+            "nickname": nickname,
+            "age": age,
+          ],
+          fulfilledFragments: [
+            ObjectIdentifier(TestMutation.Data.UpdatePerson.self),
+            ObjectIdentifier(Person.self)
+          ]
+        ))
       }
     }
   }

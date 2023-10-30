@@ -77,16 +77,8 @@ public final class MockApolloClient: ApolloClientProtocol {
       contextIdentifier: contextIdentifier,
       context: context,
       queue: queue)
-    switch fetchResult(parameters) {
-    case .success(let someResult):
-      guard let result = someResult as? GraphQLResult<Query.Data> else {
-        resultHandler?(.failure(Error.invalidResultTypeForOperation(query, someResult)))
-        return EmptyCancellable()
-      }
-      resultHandler?(.success(result))
-    case .failure(let error):
-      resultHandler?(.failure(error))
-    }
+    let result = fetchResult(parameters)
+    handleResult(result, forOperation: query, resultHandler: resultHandler)
     return EmptyCancellable()
   }
 
@@ -108,16 +100,8 @@ public final class MockApolloClient: ApolloClientProtocol {
       context: context,
       callbackQueue: callbackQueue,
       resultHandler: resultHandler)
-    switch watchResult(parameters) {
-    case .success(let someResult):
-      guard let result = someResult as? GraphQLResult<Query.Data> else {
-        resultHandler(.failure(Error.invalidResultTypeForOperation(query, someResult)))
-        return watcher
-      }
-      resultHandler(.success(result))
-    case .failure(let error):
-      resultHandler(.failure(error))
-    }
+    let result = watchResult(parameters)
+    handleResult(result, forOperation: query, resultHandler: resultHandler)
     return watcher
   }
 
@@ -133,16 +117,8 @@ public final class MockApolloClient: ApolloClientProtocol {
       publishResultToStore: publishResultToStore,
       context: context,
       queue: queue)
-    switch performResult(parameters) {
-    case .success(let someResult):
-      guard let result = someResult as? GraphQLResult<Mutation.Data> else {
-        resultHandler?(.failure(Error.invalidResultTypeForOperation(mutation, someResult)))
-        return EmptyCancellable()
-      }
-      resultHandler?(.success(result))
-    case .failure(let error):
-      resultHandler?(.failure(error))
-    }
+    let result = performResult(parameters)
+    handleResult(result, forOperation: mutation, resultHandler: resultHandler)
     return EmptyCancellable()
   }
 
@@ -158,16 +134,8 @@ public final class MockApolloClient: ApolloClientProtocol {
       files: files,
       context: context,
       queue: queue)
-    switch uploadResult(parameters) {
-    case .success(let someResult):
-      guard let result = someResult as? GraphQLResult<Operation.Data> else {
-        resultHandler?(.failure(Error.invalidResultTypeForOperation(operation, someResult)))
-        return EmptyCancellable()
-      }
-      resultHandler?(.success(result))
-    case .failure(let error):
-      resultHandler?(.failure(error))
-    }
+    let result = uploadResult(parameters)
+    handleResult(result, forOperation: operation, resultHandler: resultHandler)
     return EmptyCancellable()
   }
 
@@ -181,16 +149,8 @@ public final class MockApolloClient: ApolloClientProtocol {
     let parameters = SubscribeParameters(
       context: context,
       queue: queue)
-    switch subscribeResult(parameters) {
-    case .success(let someResult):
-      guard let result = someResult as? GraphQLResult<Subscription.Data> else {
-        resultHandler(.failure(Error.invalidResultTypeForOperation(subscription, someResult)))
-        return EmptyCancellable()
-      }
-      resultHandler(.success(result))
-    case .failure(let error):
-      resultHandler(.failure(error))
-    }
+    let result = subscribeResult(parameters)
+    handleResult(result, forOperation: subscription, resultHandler: resultHandler)
     return EmptyCancellable()
   }
 
@@ -199,6 +159,25 @@ public final class MockApolloClient: ApolloClientProtocol {
   enum Error: Swift.Error {
     case noResultSet
     case invalidResultTypeForOperation(any GraphQLOperation, any GraphQLResultProtocol)
+  }
+
+  // MARK: Private
+
+  private func handleResult<Operation: GraphQLOperation>(
+    _ result: ApolloClientResult,
+    forOperation operation: Operation,
+    resultHandler: GraphQLResultHandler<Operation.Data>?)
+  {
+    switch result {
+    case .success(let someResult):
+      guard let result = someResult as? GraphQLResult<Operation.Data> else {
+        resultHandler?(.failure(Error.invalidResultTypeForOperation(operation, someResult)))
+        return
+      }
+      resultHandler?(.success(result))
+    case .failure(let error):
+      resultHandler?(.failure(error))
+    }
   }
 
 }
