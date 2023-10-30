@@ -22,7 +22,7 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
     }
 
     let expectation = expectation(description: #function)
-    apolloClient.clearCache { result in
+    apolloClient.clearCache { _ in
       expectation.fulfill()
     }
     wait(for: [expectation], timeout: 1.0)
