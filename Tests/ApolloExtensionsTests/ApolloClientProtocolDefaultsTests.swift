@@ -15,6 +15,19 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
     apolloClient = MockApolloClient()
   }
 
+  func test_clearCache() {
+    apolloClient.clearCacheResult = { queue in
+      XCTAssertEqual(queue, .main)
+      return .success(())
+    }
+
+    let expectation = expectation(description: #function)
+    apolloClient.clearCache { result in
+      expectation.fulfill()
+    }
+    wait(for: [expectation], timeout: 1.0)
+  }
+
   func test_fetch() {
     apolloClient.fetchResult = { parameters in
       XCTAssertEqual(parameters.cachePolicy, .default)

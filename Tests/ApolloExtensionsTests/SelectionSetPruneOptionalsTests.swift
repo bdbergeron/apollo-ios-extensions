@@ -23,7 +23,7 @@ final class SelectionSetPruneOptionalsTests: XCTestCase {
       nickname: "Brad",
       age: 34)
     XCTAssertNotEqual(personFromGeneratedInitializer, parsedPerson)
-    
+
     let pruned = personFromGeneratedInitializer.pruneOptionals()
     XCTAssertEqual(pruned, parsedPerson)
   }
@@ -63,5 +63,54 @@ final class SelectionSetPruneOptionalsTests: XCTestCase {
 
     // And now everything's equal as one would expect
     XCTAssertEqual(pruned, parsedPerson)
+  }
+
+  func test_pruneOptionals_nested_withOptional() throws {
+    let parsed = try PersonCollection(
+      data: [
+        "__typename": "PersonCollection",
+        "edges": [
+          [
+            "__typename": "PersonCollectionEdge",
+            "node": [
+              "__typename": "Person",
+              "id": "1",
+              "name": "Bradley",
+              "nickname": "Brad",
+              "age": 34,
+            ] as [String: AnyHashable],
+          ] as [String: AnyHashable],
+          [
+            "__typename": "PersonCollectionEdge",
+            "node": [
+              "__typename": "Person",
+              "id": "2",
+              "name": "Christopher",
+              "nickname": "Chris",
+              "age": 32,
+            ] as [String: AnyHashable],
+          ] as [String: AnyHashable],
+        ]
+      ])
+    let fromGeneratedInitializer = PersonCollection(
+      edges: [
+        .init(
+          node: .init(
+            id: "1",
+            name: "Bradley",
+            nickname: "Brad",
+            age: 34)),
+        .init(
+          node: .init(
+            id: "2",
+            name: "Christopher",
+            nickname: "Chris",
+            age: 32)),
+      ])
+
+    XCTAssertNotEqual(fromGeneratedInitializer, parsed)
+
+    let pruned = fromGeneratedInitializer.pruneOptionals()
+    XCTAssertEqual(pruned, parsed)
   }
 }

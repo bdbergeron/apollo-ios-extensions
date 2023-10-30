@@ -39,10 +39,22 @@ final class ApolloTestHelpersTests: XCTestCase {
     XCTAssertEqual(data.people.edges[1].node.name, "Noah")
     XCTAssertEqual(data.people.edges[1].node.nickname, nil)
     XCTAssertEqual(data.people.edges[1].node.age, nil)
+
+    let person1 = Person(id: "1", name: "Bradley", nickname: "Brad", age: 34)
+    XCTAssertEqual(data.people.edges[0].node.fragments.person, person1.pruneOptionals())
+
+    let person2 = Person(id: "2", name: "Noah", nickname: nil, age: nil)
+    XCTAssertEqual(data.people.edges[1].node.fragments.person, person2.pruneOptionals())
+
+    let people = PersonCollection(edges: [
+      .init(node: .init(id: "1", name: "Bradley", nickname: "Brad", age: 34)),
+      .init(node: .init(id: "2", name: "Noah", nickname: nil, age: nil)),
+    ])
+    XCTAssertEqual(data.people.fragments.personCollection, people.pruneOptionals())
   }
 
   func test_dataDict_debugDescription() {
-    let dataDict = TestQuery.Data.People.Edge.Node(id: "1", name: "Brad").__data
+    let dataDict = Person(id: "1", name: "Brad").__data
     let expected: [(key: String, value: AnyHashable)] = [
       (key: "__typename", value: "Person"),
       (key: "age", value: AnyHashable(AnyHashable?.none)),

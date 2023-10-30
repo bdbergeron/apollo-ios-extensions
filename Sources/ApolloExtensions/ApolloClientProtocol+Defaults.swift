@@ -5,6 +5,14 @@ import ApolloAPI
 import Foundation
 
 extension ApolloClientProtocol {
+
+  public func clearCache(
+    callbackQueue: DispatchQueue = .main,
+    completion: ((Result<Void, Error>) -> Void)? = nil)
+  {
+    clearCache(callbackQueue: callbackQueue, completion: completion)
+  }
+  
   @discardableResult
   public func fetch<Query: GraphQLQuery>(
     query: Query,

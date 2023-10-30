@@ -1,9 +1,5 @@
 subscription TestSubscription {
   people {
-    edges {
-      node {
-        ...Person
-      }
-    }
+    ...PersonCollection
   }
 }

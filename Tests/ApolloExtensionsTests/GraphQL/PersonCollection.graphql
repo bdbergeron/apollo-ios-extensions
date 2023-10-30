@@ -1,0 +1,7 @@
+fragment PersonCollection on PersonCollection {
+  edges {
+    node {
+      ...Person
+    }
+  }
+}
