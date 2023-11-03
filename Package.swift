@@ -38,9 +38,9 @@ let package = Package(
         .target(name: "ApolloExtensionsTestSchema"),
       ],
       exclude: [
-        "GraphQL/TestMutation.graphql",
         "GraphQL/Person.graphql",
         "GraphQL/PersonCollection.graphql",
+        "GraphQL/TestMutation.graphql",
         "GraphQL/TestQuery.graphql",
         "GraphQL/TestSubscription.graphql",
       ],
