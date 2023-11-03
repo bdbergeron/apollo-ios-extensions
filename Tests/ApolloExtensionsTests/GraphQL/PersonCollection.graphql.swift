@@ -99,8 +99,8 @@ struct PersonCollection: ApolloExtensionsTestSchema.SelectionSet, Fragment {
             "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
             "id": id,
             "name": name,
-            "nickname": nickname,
-            "age": age,
+            "nickname": nickname as AnyHashable? ?? .none,
+            "age": age as AnyHashable? ?? .none,
           ],
           fulfilledFragments: [
             ObjectIdentifier(PersonCollection.Edge.Node.self),

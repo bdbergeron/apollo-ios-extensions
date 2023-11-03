@@ -15,7 +15,7 @@ let package = Package(
     .library(name: "ApolloExtensions", targets: ["ApolloExtensions"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apollographql/apollo-ios", .upToNextMajor(from: "1.5.0")),
+    .package(url: "https://github.com/bdbergeron/apollo-ios", branch: "fix-optionals"),
   ],
   targets: [
     .target(
@@ -27,12 +27,22 @@ let package = Package(
       name: "ApolloExtensionsTestSchema",
       dependencies: [
         .product(name: "Apollo", package: "apollo-ios"),
+      ],
+      exclude: [
+        "schema.graphqls",
       ]),
     .testTarget(
       name: "ApolloExtensionsTests",
       dependencies: [
         .target(name: "ApolloExtensions"),
         .target(name: "ApolloExtensionsTestSchema"),
+      ],
+      exclude: [
+        "GraphQL/Person.graphql",
+        "GraphQL/PersonCollection.graphql",
+        "GraphQL/TestMutation.graphql",
+        "GraphQL/TestQuery.graphql",
+        "GraphQL/TestSubscription.graphql",
       ],
       resources: [
         .process("Resources"),
