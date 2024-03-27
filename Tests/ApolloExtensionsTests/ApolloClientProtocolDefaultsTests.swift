@@ -64,6 +64,7 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
   func test_perform() {
     apolloClient.performResult = { parameters in
       XCTAssertEqual(parameters.publishResultToStore, true)
+      XCTAssertNil(parameters.contextIdentifier)
       XCTAssertNil(parameters.context)
       XCTAssertEqual(parameters.queue, .main)
       let data = TestMutation.Data(updatePerson: .init(id: "1", name: "Brad"))

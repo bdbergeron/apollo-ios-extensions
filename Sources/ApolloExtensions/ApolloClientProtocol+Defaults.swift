@@ -52,6 +52,7 @@ extension ApolloClientProtocol {
   public func perform<Mutation: GraphQLMutation>(
     mutation: Mutation,
     publishResultToStore: Bool = true,
+    contextIdentifier: UUID? = nil,
     context: RequestContext? = nil,
     queue: DispatchQueue = .main,
     resultHandler: GraphQLResultHandler<Mutation.Data>? = nil)
@@ -60,6 +61,7 @@ extension ApolloClientProtocol {
     perform(
       mutation: mutation,
       publishResultToStore: publishResultToStore,
+      contextIdentifier: contextIdentifier,
       context: context,
       queue: queue,
       resultHandler: resultHandler)

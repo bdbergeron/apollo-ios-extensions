@@ -15,7 +15,7 @@ let package = Package(
     .library(name: "ApolloExtensions", targets: ["ApolloExtensions"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apollographql/apollo-ios", .upToNextMajor(from: "1.5.0")),
+    .package(url: "https://github.com/apollographql/apollo-ios", .upToNextMajor(from: "1.9.1")),
   ],
   targets: [
     .target(

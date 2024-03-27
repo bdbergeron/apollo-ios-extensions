@@ -35,6 +35,7 @@ public final class MockApolloClient: ApolloClientProtocol {
 
   public struct PerformParameters {
     public let publishResultToStore: Bool
+    public let contextIdentifier: UUID?
     public let context: RequestContext?
     public let queue: DispatchQueue
   }
@@ -108,6 +109,7 @@ public final class MockApolloClient: ApolloClientProtocol {
   public func perform<Mutation: GraphQLMutation>(
     mutation: Mutation,
     publishResultToStore: Bool,
+    contextIdentifier: UUID?,
     context: RequestContext?,
     queue: DispatchQueue,
     resultHandler: GraphQLResultHandler<Mutation.Data>?)
@@ -115,6 +117,7 @@ public final class MockApolloClient: ApolloClientProtocol {
   {
     let parameters = PerformParameters(
       publishResultToStore: publishResultToStore,
+      contextIdentifier: contextIdentifier,
       context: context,
       queue: queue)
     let result = performResult(parameters)
