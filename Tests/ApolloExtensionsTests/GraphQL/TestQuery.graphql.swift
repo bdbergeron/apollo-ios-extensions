@@ -9,7 +9,7 @@ final class TestQuery: GraphQLQuery {
   static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
       #"query TestQuery { people { __typename ...PersonCollection } }"#,
-      fragments: [PersonCollection.self, Person.self]
+      fragments: [Person.self, PersonCollection.self]
     ))
 
   public init() {}
@@ -52,7 +52,7 @@ final class TestQuery: GraphQLQuery {
         .fragment(PersonCollection.self),
       ] }
 
-      var edges: [PersonCollection.Edge] { __data["edges"] }
+      var edges: [Edge] { __data["edges"] }
 
       struct Fragments: FragmentContainer {
         let __data: DataDict
@@ -62,7 +62,7 @@ final class TestQuery: GraphQLQuery {
       }
 
       init(
-        edges: [PersonCollection.Edge]
+        edges: [Edge]
       ) {
         self.init(_dataDict: DataDict(
           data: [
@@ -75,6 +75,8 @@ final class TestQuery: GraphQLQuery {
           ]
         ))
       }
+
+      typealias Edge = PersonCollection.Edge
     }
   }
 }

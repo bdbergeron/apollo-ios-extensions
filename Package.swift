@@ -27,12 +27,22 @@ let package = Package(
       name: "ApolloExtensionsTestSchema",
       dependencies: [
         .product(name: "Apollo", package: "apollo-ios"),
+      ],
+      exclude: [
+        "schema.graphqls",
       ]),
     .testTarget(
       name: "ApolloExtensionsTests",
       dependencies: [
         .target(name: "ApolloExtensions"),
         .target(name: "ApolloExtensionsTestSchema"),
+      ],
+      exclude: [
+        "GraphQL/Person.graphql",
+        "GraphQL/PersonCollection.graphql",
+        "GraphQL/TestMutation.graphql",
+        "GraphQL/TestQuery.graphql",
+        "GraphQL/TestSubscription.graphql",
       ],
       resources: [
         .process("Resources"),

@@ -20,7 +20,7 @@ where Schema == ApolloExtensionsTestSchema.SchemaMetadata {}
 public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
   public static let configuration: ApolloAPI.SchemaConfiguration.Type = SchemaConfiguration.self
 
-  public static func objectType(forTypename typename: String) -> Object? {
+  public static func objectType(forTypename typename: String) -> ApolloAPI.Object? {
     switch typename {
     case "Mutation": return ApolloExtensionsTestSchema.Objects.Mutation
     case "Person": return ApolloExtensionsTestSchema.Objects.Person
