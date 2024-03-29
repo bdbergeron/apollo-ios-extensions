@@ -34,7 +34,7 @@ jobs:
       - name: Prepare Code Coverage
         run: xcrun llvm-cov export --ignore-filename-regex='(Tests|Mocks)[/\\].*' -format="lcov" .build/debug/${{ env.PACKAGE_NAME }}PackageTests.xctest/Contents/MacOS/${{ env.PACKAGE_NAME }}PackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
