@@ -21,12 +21,12 @@ concurrency:
 jobs:
   build:
     name: Build and Test
-    runs-on: macos-13
+    runs-on: macos-14
     env:
       PACKAGE_NAME: ApolloExtensions
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build
         run: swift build
       - name: Test
@@ -34,7 +34,7 @@ jobs:
       - name: Prepare Code Coverage
         run: xcrun llvm-cov export --ignore-filename-regex='(Tests|Mocks)[/\\].*' -format="lcov" .build/debug/${{ env.PACKAGE_NAME }}PackageTests.xctest/Contents/MacOS/${{ env.PACKAGE_NAME }}PackageTests -instr-profile .build/debug/codecov/default.profdata > info.lcov
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true
