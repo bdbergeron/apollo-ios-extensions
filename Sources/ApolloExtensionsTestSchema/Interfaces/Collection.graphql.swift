@@ -4,5 +4,5 @@
 import ApolloAPI
 
 public extension Interfaces {
-  static let Collection = Interface(name: "Collection")
+  static let Collection = ApolloAPI.Interface(name: "Collection")
 }
