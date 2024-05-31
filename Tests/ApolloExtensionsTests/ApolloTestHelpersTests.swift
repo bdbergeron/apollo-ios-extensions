@@ -41,16 +41,16 @@ final class ApolloTestHelpersTests: XCTestCase {
     XCTAssertEqual(data.people.edges[1].node.age, nil)
 
     let person1 = Person(id: "1", name: "Bradley", nickname: "Brad", age: 34)
-    XCTAssertEqual(data.people.edges[0].node.fragments.person, person1.pruneOptionals())
+    XCTAssertEqual(data.people.edges[0].node.fragments.person, person1)
 
     let person2 = Person(id: "2", name: "Noah", nickname: nil, age: nil)
-    XCTAssertEqual(data.people.edges[1].node.fragments.person, person2.pruneOptionals())
+    XCTAssertEqual(data.people.edges[1].node.fragments.person, person2)
 
     let people = PersonCollection(edges: [
       .init(node: .init(id: "1", name: "Bradley", nickname: "Brad", age: 34)),
       .init(node: .init(id: "2", name: "Noah", nickname: nil, age: nil)),
     ])
-    XCTAssertEqual(data.people.fragments.personCollection, people.pruneOptionals())
+    XCTAssertEqual(data.people.fragments.personCollection, people)
   }
 
   func test_dataDict_debugDescription() {
