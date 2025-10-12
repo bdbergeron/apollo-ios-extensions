@@ -23,7 +23,7 @@ extension DataDict {
       guard let optionalValue = value.base as? AnyHashable? else {
         return value
       }
-      return optionalValue ?? AnyHashable?.none
+      return optionalValue ?? nil
     }
     return .init(data: prunedData, fulfilledFragments: _fulfilledFragments)
   }

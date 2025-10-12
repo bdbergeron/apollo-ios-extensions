@@ -33,7 +33,6 @@ final class MockApolloClientTests: XCTestCase {
   }
 
   func test_fetch_failsWithInvalidResultTypeForOperationError() {
-    let subscription = TestSubscription()
     let data = TestSubscription.Data(people: .init(edges: []))
     let subscriptionResult = GraphQLResult(data: data)
 
@@ -52,7 +51,7 @@ final class MockApolloClientTests: XCTestCase {
           XCTFail("Unexpected error: \(error)")
           return
         }
-        XCTAssertEqual(operation.hashValue, subscription.hashValue)
+        XCTAssertNotNil(operation as? TestQuery)
         XCTAssertEqual(result as? GraphQLResult<TestSubscription.Data>, subscriptionResult)
       }
     }

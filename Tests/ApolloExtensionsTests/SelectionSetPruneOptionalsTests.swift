@@ -8,6 +8,26 @@ import XCTest
 // MARK: - SelectionSetPruneOptionalsTests
 
 final class SelectionSetPruneOptionalsTests: XCTestCase {
+  func test_pruneOptionals_notSpecified() throws {
+    let parsedPerson = try Person(
+      data: [
+        "__typename": "Person",
+        "id": "1",
+        "name": "Bradley",
+        "nickname": nil,
+        "age": nil,
+      ])
+    let personFromGeneratedInitializer = Person(
+      id: "1",
+      name: "Bradley")
+    XCTAssertEqual(personFromGeneratedInitializer, parsedPerson)
+    XCTAssertNotEqual(personFromGeneratedInitializer.__data, parsedPerson.__data)
+
+    let pruned = personFromGeneratedInitializer.pruneOptionals()
+    XCTAssertEqual(pruned, parsedPerson)
+    XCTAssertEqual(pruned.__data, parsedPerson.__data)
+  }
+
   func test_pruneOptionals_withOptional() throws {
     let parsedPerson = try Person(
       data: [
@@ -20,15 +40,39 @@ final class SelectionSetPruneOptionalsTests: XCTestCase {
     let personFromGeneratedInitializer = Person(
       id: "1",
       name: "Bradley",
-      nickname: "Brad",
-      age: 34)
-    XCTAssertNotEqual(personFromGeneratedInitializer, parsedPerson)
+      nickname: .some("Brad"),
+      age: .some(34))
+    XCTAssertEqual(personFromGeneratedInitializer, parsedPerson)
+    XCTAssertNotEqual(personFromGeneratedInitializer.__data, parsedPerson.__data)
 
     let pruned = personFromGeneratedInitializer.pruneOptionals()
     XCTAssertEqual(pruned, parsedPerson)
+    XCTAssertEqual(pruned.__data, parsedPerson.__data)
   }
 
-  func test_pruneOptionals_withNull() throws {
+  func test_pruneOptionals_withNone() throws {
+    let parsedPerson = try Person(
+      data: [
+        "__typename": "Person",
+        "id": "1",
+        "name": "Bradley",
+        "nickname": nil,
+        "age": nil,
+      ])
+    let personFromGeneratedInitializer = Person(
+      id: "1",
+      name: "Bradley",
+      nickname: .none,
+      age: .none)
+    XCTAssertEqual(personFromGeneratedInitializer, parsedPerson)
+    XCTAssertNotEqual(personFromGeneratedInitializer.__data, parsedPerson.__data)
+
+    let pruned = personFromGeneratedInitializer.pruneOptionals()
+    XCTAssertEqual(pruned, parsedPerson)
+    XCTAssertEqual(pruned.__data, parsedPerson.__data)
+  }
+
+  func test_pruneOptionals_withNil() throws {
     let parsedPerson = try Person(
       data: [
         "__typename": "Person",
@@ -42,27 +86,12 @@ final class SelectionSetPruneOptionalsTests: XCTestCase {
       name: "Bradley",
       nickname: nil,
       age: nil)
-
-    // All the fields are equal...
-    XCTAssertEqual(personFromGeneratedInitializer.__typename, parsedPerson.__typename)
-    XCTAssertEqual(personFromGeneratedInitializer.__objectType, parsedPerson.__objectType)
-    XCTAssertEqual(personFromGeneratedInitializer.id, parsedPerson.id)
-    XCTAssertEqual(personFromGeneratedInitializer.name, parsedPerson.name)
-    XCTAssertEqual(personFromGeneratedInitializer.nickname, parsedPerson.nickname)
-    XCTAssertEqual(personFromGeneratedInitializer.age, parsedPerson.age)
-    XCTAssertEqual(personFromGeneratedInitializer.__typename, parsedPerson.__typename)
-    XCTAssertEqual(personFromGeneratedInitializer.__objectType, parsedPerson.__objectType)
-
-    // But the objects themselves are seemingly not.
-    XCTAssertNotEqual(personFromGeneratedInitializer, parsedPerson)
-
-    // So what's driving the inequality? The underlying `DataDict`
+    XCTAssertEqual(personFromGeneratedInitializer, parsedPerson)
     XCTAssertNotEqual(personFromGeneratedInitializer.__data, parsedPerson.__data)
 
     let pruned = personFromGeneratedInitializer.pruneOptionals()
-
-    // And now everything's equal as one would expect
     XCTAssertEqual(pruned, parsedPerson)
+    XCTAssertEqual(pruned.__data, parsedPerson.__data)
   }
 
   func test_pruneOptionals_nested_withOptional() throws {
@@ -78,18 +107,18 @@ final class SelectionSetPruneOptionalsTests: XCTestCase {
               "name": "Bradley",
               "nickname": "Brad",
               "age": 34,
-            ] as [String: AnyHashable],
-          ] as [String: AnyHashable],
+            ] as [String: AnyHashable?],
+          ] as [String: AnyHashable?],
           [
             "__typename": "PersonCollectionEdge",
             "node": [
               "__typename": "Person",
               "id": "2",
               "name": "Christopher",
-              "nickname": "Chris",
+              "nickname": nil,
               "age": 32,
-            ] as [String: AnyHashable],
-          ] as [String: AnyHashable],
+            ] as [String: AnyHashable?],
+          ] as [String: AnyHashable?],
         ]
       ])
     let fromGeneratedInitializer = PersonCollection(
@@ -104,13 +133,14 @@ final class SelectionSetPruneOptionalsTests: XCTestCase {
           node: .init(
             id: "2",
             name: "Christopher",
-            nickname: "Chris",
             age: 32)),
       ])
 
-    XCTAssertNotEqual(fromGeneratedInitializer, parsed)
+    XCTAssertEqual(fromGeneratedInitializer, parsed)
+    XCTAssertNotEqual(fromGeneratedInitializer.__data, parsed.__data)
 
     let pruned = fromGeneratedInitializer.pruneOptionals()
     XCTAssertEqual(pruned, parsed)
+    XCTAssertEqual(pruned.__data, parsed.__data)
   }
 }
