@@ -6,6 +6,7 @@ import ApolloAPI
 public extension Objects {
   static let PersonCollectionEdge = ApolloAPI.Object(
     typename: "PersonCollectionEdge",
-    implementedInterfaces: [Interfaces.CollectionEdge.self]
+    implementedInterfaces: [Interfaces.CollectionEdge.self],
+    keyFields: nil
   )
 }

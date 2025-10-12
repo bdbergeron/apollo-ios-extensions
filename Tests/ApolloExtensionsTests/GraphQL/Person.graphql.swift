@@ -12,7 +12,7 @@ struct Person: ApolloExtensionsTestSchema.SelectionSet, Fragment {
   let __data: DataDict
   init(_dataDict: DataDict) { __data = _dataDict }
 
-  static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Person }
+  static var __parentType: any ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Person }
   static var __selections: [ApolloAPI.Selection] { [
     .field("__typename", String.self),
     .field("id", ApolloExtensionsTestSchema.ID.self),

@@ -32,7 +32,7 @@ final class TestMutation: GraphQLMutation {
     let __data: DataDict
     init(_dataDict: DataDict) { __data = _dataDict }
 
-    static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Mutation }
+    static var __parentType: any ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Mutation }
     static var __selections: [ApolloAPI.Selection] { [
       .field("updatePerson", UpdatePerson.self, arguments: [
         "id": .variable("id"),
@@ -63,7 +63,7 @@ final class TestMutation: GraphQLMutation {
       let __data: DataDict
       init(_dataDict: DataDict) { __data = _dataDict }
 
-      static var __parentType: ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Person }
+      static var __parentType: any ApolloAPI.ParentType { ApolloExtensionsTestSchema.Objects.Person }
       static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .fragment(Person.self),

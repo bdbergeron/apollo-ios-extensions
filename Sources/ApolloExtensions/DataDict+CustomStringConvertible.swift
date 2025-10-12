@@ -3,7 +3,7 @@
 import ApolloAPI
 import Foundation
 
-extension DataDict: CustomStringConvertible {
+extension DataDict: @retroactive CustomStringConvertible {
   public var description: String {
     _data.sorted { $0.key < $1.key }.description
   }

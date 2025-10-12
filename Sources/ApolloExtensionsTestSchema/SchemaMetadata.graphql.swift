@@ -16,15 +16,15 @@ public protocol MutableInlineFragment: ApolloAPI.MutableSelectionSet & ApolloAPI
 where Schema == ApolloExtensionsTestSchema.SchemaMetadata {}
 
 public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
-  public static let configuration: ApolloAPI.SchemaConfiguration.Type = SchemaConfiguration.self
+  public static let configuration: any ApolloAPI.SchemaConfiguration.Type = SchemaConfiguration.self
 
   public static func objectType(forTypename typename: String) -> ApolloAPI.Object? {
     switch typename {
     case "Mutation": return ApolloExtensionsTestSchema.Objects.Mutation
     case "Person": return ApolloExtensionsTestSchema.Objects.Person
-    case "Query": return ApolloExtensionsTestSchema.Objects.Query
     case "PersonCollection": return ApolloExtensionsTestSchema.Objects.PersonCollection
     case "PersonCollectionEdge": return ApolloExtensionsTestSchema.Objects.PersonCollectionEdge
+    case "Query": return ApolloExtensionsTestSchema.Objects.Query
     case "Subscription": return ApolloExtensionsTestSchema.Objects.Subscription
     default: return nil
     }
