@@ -1,4 +1,4 @@
-# apollo-ios-extensions
+# ApolloExtensions
 Helpful extensions to the [apollo-ios](https://github.com/apollographql/apollo-ios) package.
 
 [![Build and Test](https://github.com/bdbergeron/apollo-ios-extensions/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/bdbergeron/apollo-ios-extensions/actions/workflows/build-and-test.yml)
@@ -8,55 +8,45 @@ Helpful extensions to the [apollo-ios](https://github.com/apollographql/apollo-i
 
 ## Features
 
-### ApolloClientProtocol Default Values
-It's wonderful we're provided with `ApolloClientProtocol`, which `ApolloClient` conforms to.
-However, the `ApolloClient` implementation provides default parameter values that `ApolloClientProtocol`
-doesn't provide. Consider this a non-issue now!
-
 ### MockApolloClient
-Want to test your app's code around `ApolloClient`? Look no further than `MockApolloClient`!
-This mock object conforms to `AppoloClientProtocol` and allows you to stub responses to queries,
-mutations, and subscriptions.
+Want to test your app's code around `ApolloClient`? Look no further than `MockApolloClient`! This mock object conforms to `ApolloClientProtocol` and allows you to stub responses to queries, mutations, and subscriptions.
 
 ```swift
-func test_query() throws {
+@Test
+func fetchAllFriends() throws {
+  let mockedResponseData = GetAllFriendsQuery.Data(friends: .init(edges: [.init(node: .init(id: "1", name: "Brad"))]))
   let apolloClient = MockApolloClient()
-  apolloClient.fetchResult = { parameters in
-    let data = TestQuery.Data(items: .init(edges: [
-      .init(node: .init(id: "1",name: "Brad")),
-    ]))
-    return .success(GraphQLResult(data: data))
-  }
-
-  let expectation = expectation(description: #function)
-  apolloClient.fetch(query: TestQuery()) { result in
-    expectation.fulfill()
-    switch result {
-    case .success(let result):
-      XCTAssertEqual(result.data?.items.edges.count, 1)
-      XCTAssertEqual(result.data?.items.edges[0].node.id, "1")
-      XCTAssertEqual(result.data?.items.edges[0].node.name, "Brad")
-    case .failure(let error):
-      XCTFail("Unexpected error: \(error)")
-    }
-  }
-  wait(for: [expectation], timeout: 1.0)
+  await apolloClient.registerResult(
+    .success(.init(
+      data: mockedResponseData,
+      extensions: nil,
+      errors: nil,
+      source: .server,
+      dependentKeys: nil
+    )),
+    for: GetAllFriendsQuery.self
+  )
+  let friendsService = FriendsService(apolloClient: apolloClient)
+  let friends = try await friendsService.fetchAllFriends() // Internally performs the fetch operation on it's apolloClient with GetAllFriendsQuery
+  let data = try #require(response.data)
+  #expect(data.people.edges.count == 1)
+  #expect(data.people.edges[0].node.fragments.person.id == "1")
+  #expect(data.people.edges[0].node.fragments.person.name == "Brad")
 }
 ```
 
-### Testing / Mocking GraphQLResult
-Want to test your generated GraphQL data models against stable JSON data that you control?
-`GraphQLResult.mockedJSONResponse` is your answer!
+### Testing / Mocking GraphQL Operations
+Want to validate your generated GraphQL operations and data models against stable JSON data that you control? `mockedJSONResponse` is your answer.
 
-Mock your response, like `items.json` in your app bundle:
+Mock your response, like `people.json` in your app bundle:
 ```json
 {
   "data": {
-    "items": {
-      "__typename": "ItemCollection",
+    "people": {
+      "__typename": "PersonCollection",
       "edges": [
         {
-          "__typename": "ItemCollectionEdge",
+          "__typename": "PersonCollectionEdge",
           "node": {
             "__typename": "Item",
             "id": "1",
@@ -69,16 +59,16 @@ Mock your response, like `items.json` in your app bundle:
 }
 ```
 
-Then test against that mock response:
+And use that mock response in your tests:
 ```swift
-func test_mockedJSONResponse() throws {
-  let url = try XCTUnwrap(Bundle.module.url(forResource: "items", withExtension: "json"))
-  let response = try GraphQLResult.mockedJSONResponse(
-    for: TestQuery(),
-    jsonURL: url)
-  let data = try XCTUnwrap(response.data)
-  XCTAssertEqual(data.items.edges.first?.node.__typename, "Item")
-  XCTAssertEqual(data.items.edges.first?.node.id, "1")
-  XCTAssertEqual(data.items.edges.first?.node.name, "Brad")
+@Test
+func mockedPeopleQueryResponse() async throws {
+  let mockURL = try #require(Bundle.module.url(forResource: "people", withExtension: "json"))
+  let query = PeopleQuery()
+  let response = try await query.mockedJSONResponse(url: mockURL)
+  let data = try #require(response.data)
+
+  let person = Person(id: "1", name: "Bradley", nickname: "Brad", age: 36)
+  #expect(data.people.edges[0].node.fragments.person == person)
 }
 ```

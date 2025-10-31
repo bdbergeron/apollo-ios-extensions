@@ -2,9 +2,10 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+@_spi(Execution) @_spi(Unsafe) import ApolloAPI
 import ApolloExtensionsTestSchema
 
-final class TestQuery: GraphQLQuery {
+struct TestQuery: GraphQLQuery {
   static let operationName: String = "TestQuery"
   static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
@@ -22,21 +23,19 @@ final class TestQuery: GraphQLQuery {
     static var __selections: [ApolloAPI.Selection] { [
       .field("people", People.self),
     ] }
+    static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+      TestQuery.Data.self
+    ] }
 
     var people: People { __data["people"] }
 
     init(
       people: People
     ) {
-      self.init(_dataDict: DataDict(
-        data: [
-          "__typename": ApolloExtensionsTestSchema.Objects.Query.typename,
-          "people": people._fieldData,
-        ],
-        fulfilledFragments: [
-          ObjectIdentifier(TestQuery.Data.self)
-        ]
-      ))
+      self.init(unsafelyWithData: [
+        "__typename": ApolloExtensionsTestSchema.Objects.Query.typename,
+        "people": people._fieldData,
+      ])
     }
 
     /// People
@@ -51,6 +50,10 @@ final class TestQuery: GraphQLQuery {
         .field("__typename", String.self),
         .fragment(PersonCollection.self),
       ] }
+      static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        TestQuery.Data.People.self,
+        PersonCollection.self
+      ] }
 
       var edges: [Edge] { __data["edges"] }
 
@@ -64,16 +67,10 @@ final class TestQuery: GraphQLQuery {
       init(
         edges: [Edge]
       ) {
-        self.init(_dataDict: DataDict(
-          data: [
-            "__typename": ApolloExtensionsTestSchema.Objects.PersonCollection.typename,
-            "edges": edges._fieldData,
-          ],
-          fulfilledFragments: [
-            ObjectIdentifier(TestQuery.Data.People.self),
-            ObjectIdentifier(PersonCollection.self)
-          ]
-        ))
+        self.init(unsafelyWithData: [
+          "__typename": ApolloExtensionsTestSchema.Objects.PersonCollection.typename,
+          "edges": edges._fieldData,
+        ])
       }
 
       typealias Edge = PersonCollection.Edge

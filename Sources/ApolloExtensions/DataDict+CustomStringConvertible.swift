@@ -1,6 +1,6 @@
 // Created by Brad Bergeron on 10/17/23.
 
-import ApolloAPI
+@_spi(Unsafe) import ApolloAPI
 import Foundation
 
 extension DataDict: @retroactive CustomStringConvertible {

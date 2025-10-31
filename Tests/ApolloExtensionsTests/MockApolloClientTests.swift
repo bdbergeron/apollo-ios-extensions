@@ -1,61 +1,180 @@
 // Created by Brad Bergeron on 10/30/23.
 
 import Apollo
-import XCTest
+import ApolloExtensionsTestSchema
+import Testing
 
 @testable import ApolloExtensions
 
 // MARK: - MockApolloClientTests
 
-final class MockApolloClientTests: XCTestCase {
+@Suite
+struct MockApolloClientTests {
 
-  // MARK: Internal
+  // MARK: Lifecycle
 
-  override func setUp() {
+  init() {
     apolloClient = MockApolloClient()
   }
 
-  func test_fetch_failsWithNoResultSetError() {
-    let expectation = expectation(description: #function)
-    apolloClient.fetch(query: TestQuery()) { result in
-      expectation.fulfill()
-      switch result {
-      case .success:
-        XCTFail("Should fail.")
-      case .failure(let error):
-        guard case .noResultSet = error as? MockApolloClient.Error else {
-          XCTFail("Unexpected error: \(error)")
-          return
-        }
+  // MARK: Internal
+
+  @Test
+  func fetch_failsWithNoResultSetError() async throws {
+    do {
+      _ = try await apolloClient.fetch(query: TestQuery())
+      Issue.record("Should fail.")
+    } catch {
+      guard case .noResultSet = error as? MockApolloClient.Error else {
+        Issue.record(error, "Unexpected error.")
+        return
       }
     }
-    wait(for: [expectation], timeout: 1.0)
   }
 
-  func test_fetch_failsWithInvalidResultTypeForOperationError() {
-    let data = TestSubscription.Data(people: .init(edges: []))
-    let subscriptionResult = GraphQLResult(data: data)
-
-    apolloClient.fetchResult = { _ in
-      .success(subscriptionResult)
-    }
-
-    let expectation = expectation(description: #function)
-    apolloClient.fetch(query: TestQuery()) { result in
-      expectation.fulfill()
-      switch result {
-      case .success:
-        XCTFail("Should fail.")
-      case .failure(let error):
-        guard case .invalidResultTypeForOperation(let operation, let result) = error as? MockApolloClient.Error else {
-          XCTFail("Unexpected error: \(error)")
-          return
-        }
-        XCTAssertNotNil(operation as? TestQuery)
-        XCTAssertEqual(result as? GraphQLResult<TestSubscription.Data>, subscriptionResult)
+  @Test
+  func fetch_failsWithMockedError() async throws {
+    struct TestError: Error { }
+    await apolloClient.registerResult(
+      .failure(TestError()),
+      for: TestQuery.self
+    )
+    do {
+      _ = try await apolloClient.fetch(query: TestQuery())
+      Issue.record("Should fail.")
+    } catch {
+      guard error is TestError else {
+        Issue.record(error, "Unexpected error.")
+        return
       }
     }
-    wait(for: [expectation], timeout: 1.0)
+  }
+
+  @Test
+  func fetch_succeedsWithMockedSuccessResponse() async throws {
+    let mockedResponseData = TestQuery.Data(people: .init(edges: []))
+    await apolloClient.registerResult(
+      .success(.init(
+        data: mockedResponseData,
+        extensions: nil,
+        errors: nil,
+        source: .server,
+        dependentKeys: nil
+      )),
+      for: TestQuery.self
+    )
+    let response = try await apolloClient.fetch(query: TestQuery())
+    #expect(response.data == mockedResponseData)
+    #expect(response.errors == nil)
+  }
+
+  @Test
+  func perform_failsWithNoResultSetError() async throws {
+    do {
+      _ = try await apolloClient.perform(mutation: TestMutation(
+        id: "1",
+        updates: UpdatePersonMutationInput(name: "Brad")
+      ))
+      Issue.record("Should fail.")
+    } catch {
+      guard case .noResultSet = error as? MockApolloClient.Error else {
+        Issue.record(error, "Unexpected error.")
+        return
+      }
+    }
+  }
+
+  @Test
+  func perform_failsWithMockedError() async throws {
+    struct TestError: Error { }
+    await apolloClient.registerResult(
+      .failure(TestError()),
+      for: TestMutation.self
+    )
+    do {
+      _ = try await apolloClient.perform(mutation: TestMutation(
+        id: "1",
+        updates: UpdatePersonMutationInput(name: "Brad")
+      ))
+      Issue.record("Should fail.")
+    } catch {
+      guard error is TestError else {
+        Issue.record(error, "Unexpected error.")
+        return
+      }
+    }
+  }
+
+  @Test
+  func perform_succeedsWithMockedSuccessResponse() async throws {
+    let mockedResponseData = TestMutation.Data(updatePerson: .init(id: "1", name: "Brad"))
+    await apolloClient.registerResult(
+      .success(.init(
+        data: mockedResponseData,
+        extensions: nil,
+        errors: nil,
+        source: .server,
+        dependentKeys: nil
+      )),
+      for: TestMutation.self
+    )
+    let response = try await apolloClient.perform(mutation: TestMutation(
+      id: "1",
+      updates: UpdatePersonMutationInput(name: "Brad")
+    ))
+    #expect(response.data == mockedResponseData)
+    #expect(response.errors == nil)
+  }
+
+  @Test
+  func subscribe_failsWithNoResultSetError() async throws {
+    do {
+      _ = try await apolloClient.subscribe(subscription: TestSubscription())
+      Issue.record("Should fail.")
+    } catch {
+      guard case .noResultSet = error as? MockApolloClient.Error else {
+        Issue.record(error, "Unexpected error.")
+        return
+      }
+    }
+  }
+
+  @Test
+  func subscribe_failsWithMockedError() async throws {
+    struct TestError: Error { }
+    await apolloClient.registerResult(
+      .failure(TestError()),
+      for: TestSubscription.self
+    )
+    do {
+      _ = try await apolloClient.subscribe(subscription: TestSubscription())
+      Issue.record("Should fail.")
+    } catch {
+      guard error is TestError else {
+        Issue.record(error, "Unexpected error.")
+        return
+      }
+    }
+  }
+
+  @Test
+  func subscribe_succeedsWithMockedSuccessResponse() async throws {
+    let mockedResponseData = TestSubscription.Data(people: .init(edges: [.init(node: .init(id: "1", name: "Brad"))]))
+    await apolloClient.registerResult(
+      .success(.init(
+        data: mockedResponseData,
+        extensions: nil,
+        errors: nil,
+        source: .server,
+        dependentKeys: nil
+      )),
+      for: TestSubscription.self
+    )
+    let responseStream = try await apolloClient.subscribe(subscription: TestSubscription())
+    for try await response in responseStream {
+      #expect(response.data == mockedResponseData)
+      #expect(response.errors == nil)
+    }
   }
 
   // MARK: Private
