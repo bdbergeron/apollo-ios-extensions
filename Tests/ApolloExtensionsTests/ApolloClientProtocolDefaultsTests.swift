@@ -12,7 +12,7 @@ final class ApolloClientProtocolDefaultsTests: XCTestCase {
 
   // MARK: Internal
 
-  override func setUp() async throws{
+  override func setUp() async throws {
     apolloClient = MockApolloClient()
   }
 
