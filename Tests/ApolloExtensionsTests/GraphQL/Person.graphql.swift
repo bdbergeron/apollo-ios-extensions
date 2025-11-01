@@ -2,6 +2,7 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+@_spi(Execution) @_spi(Unsafe) import ApolloAPI
 import ApolloExtensionsTestSchema
 
 struct Person: ApolloExtensionsTestSchema.SelectionSet, Fragment {
@@ -20,6 +21,9 @@ struct Person: ApolloExtensionsTestSchema.SelectionSet, Fragment {
     .field("nickname", String?.self),
     .field("age", Int?.self),
   ] }
+  static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+    Person.self
+  ] }
 
   var id: ApolloExtensionsTestSchema.ID { __data["id"] }
   var name: String { __data["name"] }
@@ -32,17 +36,12 @@ struct Person: ApolloExtensionsTestSchema.SelectionSet, Fragment {
     nickname: String? = nil,
     age: Int? = nil
   ) {
-    self.init(_dataDict: DataDict(
-      data: [
-        "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
-        "id": id,
-        "name": name,
-        "nickname": nickname,
-        "age": age,
-      ],
-      fulfilledFragments: [
-        ObjectIdentifier(Person.self)
-      ]
-    ))
+    self.init(unsafelyWithData: [
+      "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
+      "id": id,
+      "name": name,
+      "nickname": nickname,
+      "age": age,
+    ])
   }
 }

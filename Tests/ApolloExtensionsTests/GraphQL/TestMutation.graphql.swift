@@ -2,9 +2,10 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+@_spi(Execution) @_spi(Unsafe) import ApolloAPI
 import ApolloExtensionsTestSchema
 
-final class TestMutation: GraphQLMutation {
+struct TestMutation: GraphQLMutation {
   static let operationName: String = "TestMutation"
   static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
@@ -23,7 +24,7 @@ final class TestMutation: GraphQLMutation {
     self.updates = updates
   }
 
-  public var __variables: Variables? { [
+  @_spi(Unsafe) public var __variables: Variables? { [
     "id": id,
     "updates": updates
   ] }
@@ -39,21 +40,19 @@ final class TestMutation: GraphQLMutation {
         "updates": .variable("updates")
       ]),
     ] }
+    static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+      TestMutation.Data.self
+    ] }
 
     var updatePerson: UpdatePerson { __data["updatePerson"] }
 
     init(
       updatePerson: UpdatePerson
     ) {
-      self.init(_dataDict: DataDict(
-        data: [
-          "__typename": ApolloExtensionsTestSchema.Objects.Mutation.typename,
-          "updatePerson": updatePerson._fieldData,
-        ],
-        fulfilledFragments: [
-          ObjectIdentifier(TestMutation.Data.self)
-        ]
-      ))
+      self.init(unsafelyWithData: [
+        "__typename": ApolloExtensionsTestSchema.Objects.Mutation.typename,
+        "updatePerson": updatePerson._fieldData,
+      ])
     }
 
     /// UpdatePerson
@@ -67,6 +66,10 @@ final class TestMutation: GraphQLMutation {
       static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .fragment(Person.self),
+      ] }
+      static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        TestMutation.Data.UpdatePerson.self,
+        Person.self
       ] }
 
       var id: ApolloExtensionsTestSchema.ID { __data["id"] }
@@ -87,19 +90,13 @@ final class TestMutation: GraphQLMutation {
         nickname: String? = nil,
         age: Int? = nil
       ) {
-        self.init(_dataDict: DataDict(
-          data: [
-            "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
-            "id": id,
-            "name": name,
-            "nickname": nickname,
-            "age": age,
-          ],
-          fulfilledFragments: [
-            ObjectIdentifier(TestMutation.Data.UpdatePerson.self),
-            ObjectIdentifier(Person.self)
-          ]
-        ))
+        self.init(unsafelyWithData: [
+          "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
+          "id": id,
+          "name": name,
+          "nickname": nickname,
+          "age": age,
+        ])
       }
     }
   }

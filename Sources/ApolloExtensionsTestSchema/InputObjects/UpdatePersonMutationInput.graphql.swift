@@ -1,19 +1,19 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import ApolloAPI
+@_spi(Internal) @_spi(Unsafe) import ApolloAPI
 
 public struct UpdatePersonMutationInput: InputObject {
-  public private(set) var __data: InputDict
+  @_spi(Unsafe) public private(set) var __data: InputDict
 
-  public init(_ data: InputDict) {
+  @_spi(Unsafe) public init(_ data: InputDict) {
     __data = data
   }
 
   public init(
     name: String,
     nickname: GraphQLNullable<String> = nil,
-    age: GraphQLNullable<Int> = nil
+    age: GraphQLNullable<Int32> = nil
   ) {
     __data = InputDict([
       "name": name,
@@ -32,7 +32,7 @@ public struct UpdatePersonMutationInput: InputObject {
     set { __data["nickname"] = newValue }
   }
 
-  public var age: GraphQLNullable<Int> {
+  public var age: GraphQLNullable<Int32> {
     get { __data["age"] }
     set { __data["age"] = newValue }
   }

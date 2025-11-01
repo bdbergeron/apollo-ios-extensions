@@ -2,6 +2,7 @@
 // This file was automatically generated and should not be edited.
 
 @_exported import ApolloAPI
+@_spi(Execution) @_spi(Unsafe) import ApolloAPI
 import ApolloExtensionsTestSchema
 
 struct PersonCollection: ApolloExtensionsTestSchema.SelectionSet, Fragment {
@@ -17,21 +18,19 @@ struct PersonCollection: ApolloExtensionsTestSchema.SelectionSet, Fragment {
     .field("__typename", String.self),
     .field("edges", [Edge].self),
   ] }
+  static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+    PersonCollection.self
+  ] }
 
   var edges: [Edge] { __data["edges"] }
 
   init(
     edges: [Edge]
   ) {
-    self.init(_dataDict: DataDict(
-      data: [
-        "__typename": ApolloExtensionsTestSchema.Objects.PersonCollection.typename,
-        "edges": edges._fieldData,
-      ],
-      fulfilledFragments: [
-        ObjectIdentifier(PersonCollection.self)
-      ]
-    ))
+    self.init(unsafelyWithData: [
+      "__typename": ApolloExtensionsTestSchema.Objects.PersonCollection.typename,
+      "edges": edges._fieldData,
+    ])
   }
 
   /// Edge
@@ -46,21 +45,19 @@ struct PersonCollection: ApolloExtensionsTestSchema.SelectionSet, Fragment {
       .field("__typename", String.self),
       .field("node", Node.self),
     ] }
+    static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+      PersonCollection.Edge.self
+    ] }
 
     var node: Node { __data["node"] }
 
     init(
       node: Node
     ) {
-      self.init(_dataDict: DataDict(
-        data: [
-          "__typename": ApolloExtensionsTestSchema.Objects.PersonCollectionEdge.typename,
-          "node": node._fieldData,
-        ],
-        fulfilledFragments: [
-          ObjectIdentifier(PersonCollection.Edge.self)
-        ]
-      ))
+      self.init(unsafelyWithData: [
+        "__typename": ApolloExtensionsTestSchema.Objects.PersonCollectionEdge.typename,
+        "node": node._fieldData,
+      ])
     }
 
     /// Edge.Node
@@ -74,6 +71,10 @@ struct PersonCollection: ApolloExtensionsTestSchema.SelectionSet, Fragment {
       static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
         .fragment(Person.self),
+      ] }
+      static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
+        PersonCollection.Edge.Node.self,
+        Person.self
       ] }
 
       var id: ApolloExtensionsTestSchema.ID { __data["id"] }
@@ -94,19 +95,13 @@ struct PersonCollection: ApolloExtensionsTestSchema.SelectionSet, Fragment {
         nickname: String? = nil,
         age: Int? = nil
       ) {
-        self.init(_dataDict: DataDict(
-          data: [
-            "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
-            "id": id,
-            "name": name,
-            "nickname": nickname,
-            "age": age,
-          ],
-          fulfilledFragments: [
-            ObjectIdentifier(PersonCollection.Edge.Node.self),
-            ObjectIdentifier(Person.self)
-          ]
-        ))
+        self.init(unsafelyWithData: [
+          "__typename": ApolloExtensionsTestSchema.Objects.Person.typename,
+          "id": id,
+          "name": name,
+          "nickname": nickname,
+          "age": age,
+        ])
       }
     }
   }

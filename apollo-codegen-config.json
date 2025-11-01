@@ -21,7 +21,6 @@
     }
   },
   "options": {
-    "markOperationDefinitionsAsFinal": true,
     "selectionSetInitializers": {
       "operations": true,
       "namedFragments": true
