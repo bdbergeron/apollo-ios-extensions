@@ -39,10 +39,10 @@ public final actor MockApolloClient: ApolloClientProtocol {
     try mockResponse(for: mutation).get()
   }
 
-  public func subscribe<Subscription : GraphQLSubscription>(
+  public func subscribe<Subscription: GraphQLSubscription>(
     subscription: Subscription,
-    cachePolicy: CachePolicy.Subscription,
-    requestConfiguration: RequestConfiguration?
+    cachePolicy _: CachePolicy.Subscription,
+    requestConfiguration _: RequestConfiguration?
   ) async throws -> AsyncThrowingStream<GraphQLResponse<Subscription>, Swift.Error>
   {
     let response = try mockResponse(for: subscription).get()

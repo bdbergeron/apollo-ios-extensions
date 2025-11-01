@@ -27,7 +27,7 @@ func fetchAllFriends() throws {
     for: GetAllFriendsQuery.self
   )
   let friendsService = FriendsService(apolloClient: apolloClient)
-  let friends = try await friendsService.fetchAllFriends() // Internally performs the fetch operation on it's apolloClient with GetAllFriendsQuery
+  let friends = try await friendsService.fetchAllFriends() // Internally performs the fetch operation on its apolloClient with GetAllFriendsQuery
   let data = try #require(response.data)
   #expect(data.people.edges.count == 1)
   #expect(data.people.edges[0].node.fragments.person.id == "1")
