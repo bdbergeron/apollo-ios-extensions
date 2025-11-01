@@ -1,7 +1,7 @@
 // Created by Brad Bergeron on 10/17/23.
 
-import Apollo
-import ApolloAPI
+@preconcurrency import Apollo
+@preconcurrency import ApolloAPI
 import Foundation
 
 extension ApolloClientProtocol {

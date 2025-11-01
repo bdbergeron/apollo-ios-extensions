@@ -2,8 +2,8 @@
 
 #if DEBUG
 
-import Apollo
-import ApolloAPI
+@preconcurrency import Apollo
+@preconcurrency import ApolloAPI
 import Foundation
 
 // MARK: - MockApolloClient

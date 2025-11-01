@@ -1,17 +1,18 @@
 // Created by Brad Bergeron on 10/19/23.
 
-import Apollo
+@preconcurrency import Apollo
 import XCTest
 
 @testable import ApolloExtensions
 
 // MARK: - ApolloClientProtocolDefaultsTests
 
+@MainActor
 final class ApolloClientProtocolDefaultsTests: XCTestCase {
 
   // MARK: Internal
 
-  override func setUp() {
+  override func setUp() async throws {
     apolloClient = MockApolloClient()
   }
 

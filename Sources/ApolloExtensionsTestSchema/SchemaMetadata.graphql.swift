@@ -16,7 +16,7 @@ public protocol MutableInlineFragment: ApolloAPI.MutableSelectionSet & ApolloAPI
 where Schema == ApolloExtensionsTestSchema.SchemaMetadata {}
 
 public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
-  public static let configuration: any ApolloAPI.SchemaConfiguration.Type = SchemaConfiguration.self
+  public static var configuration: any ApolloAPI.SchemaConfiguration.Type { SchemaConfiguration.self }
 
   public static func objectType(forTypename typename: String) -> ApolloAPI.Object? {
     switch typename {
