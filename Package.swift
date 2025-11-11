@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,16 +6,17 @@ import PackageDescription
 let package = Package(
   name: "ApolloExtensions",
   platforms: [
-    .iOS(.v12),
-    .macOS(.v10_14),
-    .tvOS(.v12),
-    .watchOS(.v5),
+    .iOS(.v15),
+    .macOS(.v12),
+    .tvOS(.v15),
+    .watchOS(.v8),
+    .visionOS(.v1),
   ],
   products: [
     .library(name: "ApolloExtensions", targets: ["ApolloExtensions"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/apollographql/apollo-ios", .upToNextMajor(from: "1.25.0")),
+    .package(url: "https://github.com/apollographql/apollo-ios", .upToNextMajor(from: "2.0.0")),
   ],
   targets: [
     .target(
@@ -48,12 +49,5 @@ let package = Package(
         .process("Resources"),
       ]),
   ],
-  swiftLanguageVersions: [.v5]
+  swiftLanguageModes: [.v6]
 )
-
-for target in package.targets {
-  target.swiftSettings = target.swiftSettings ?? []
-  target.swiftSettings?.append(contentsOf: [
-    .enableExperimentalFeature("StrictConcurrency")
-  ])
-}
